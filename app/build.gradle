@@ -1,0 +1,70 @@
+apply plugin: 'com.android.application'
+apply from: '../dependencies.gradle'
+apply plugin: 'me.tatarka.retrolambda'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVerison
+    buildToolsVersion  rootProject.ext.buildToolsVersion
+    defaultConfig {
+        applicationId "com.shadow.cleancode"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.javaVersion
+        targetCompatibility rootProject.ext.javaVersion
+    }
+
+    configurations.all {
+        resolutionStrategy.force libs.jsr305
+    }
+
+    dataBinding {
+        enabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta4'
+
+    // support
+    compile libs.android.support.compat
+    compile libs.android.support.cards
+    compile libs.android.support.design
+    compile libs.android.support.recycler
+
+    // retrofit2
+    compile libs.retrofit.core
+    compile libs.retrofit.converter
+    compile libs.retrofit.rxJava
+
+    // dagger
+    compile libs.dagger.core
+    compile libs.dagger.android.support
+    annotationProcessor libs.dagger.compiler
+    annotationProcessor libs.dagger.android.processor
+
+    // rxJava2
+    compile libs.rxjava.core
+    compile libs.rxjava.android
+
+
+    // test
+    testCompile libs.jUnit
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+}
